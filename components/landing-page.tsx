@@ -1,6 +1,8 @@
 'use client'
 
+import * as React from 'react'
 import { useEffect, useState } from 'react'
+import { AnimatePresence, motion, useInView, useMotionValue, useSpring } from 'framer-motion'
 import { ArrowRight, ChevronDown, Menu, Search, X } from 'lucide-react'
 import { assetLabel, deviceFrames, landingPageAssets, type AssetKey, type FrameKey } from '@/lib/landing-assets'
 
@@ -25,7 +27,23 @@ function DeviceMockup({ frame, screenshot, className = '' }: { frame: FrameKey; 
 function HighlightUnderline({ children }: { children: React.ReactNode }) { return <span className="highlight-underline">{children}</span> }
 function SouthingAccent({ children }: { children: React.ReactNode }) { return <span className="southing">{children}</span> }
 function Pill({ children }: { children: React.ReactNode }) { return <span className="pill">{children}</span> }
-function Reveal({ children, className = '' }: { children: React.ReactNode; className?: string }) { return <div className={`reveal ${className}`}>{children}</div> }
+function Reveal({ children, className = '' }: { children: React.ReactNode; className?: string }) {
+  const ref = React.useRef<HTMLDivElement>(null)
+  const visible = useInView(ref, { once: true, margin: '-80px' })
+  return <motion.div ref={ref} className={className} initial={{ opacity: 0, y: 26 }} animate={visible ? { opacity: 1, y: 0 } : undefined} transition={{ duration: 0.72, ease: [0.22, 1, 0.36, 1] }}>{children}</motion.div>
+}
+
+function AnimatedCounter({ value, label }: { value: string; label: string }) {
+  const ref = React.useRef<HTMLDivElement>(null)
+  const visible = useInView(ref, { once: true, margin: '-80px' })
+  const numeric = Number.parseInt(value.replace(/\D/g, ''), 10)
+  const progress = useMotionValue(0)
+  const spring = useSpring(progress, { stiffness: 90, damping: 20 })
+  const [display, setDisplay] = useState('0')
+  useEffect(() => { if (visible && numeric) progress.set(numeric) }, [visible, numeric, progress])
+  useEffect(() => spring.on('change', (latest) => setDisplay(value.includes('/') ? `${Math.round(latest)}/20` : value.includes('min') ? `${Math.round(latest)} min` : value === '3' ? `${Math.round(latest)}` : value)), [spring, value])
+  return <div ref={ref} className="stat"><strong>{numeric ? display : value}</strong><span>{label}</span></div>
+}
 
 const navItems = [['About', '#about'], ['How It Works', '#how-it-works'], ['Blog', '#blog'], ['For Driving Schools', '#schools'], ['Advertise With Us', '#advertise']]
 const faqs = [
@@ -47,7 +65,7 @@ export function LandingNavbar() {
   return <header className={`site-nav ${scrolled ? 'scrolled' : ''}`}><div className="nav-pill"><Logo /><nav className="desktop-nav">{navItems.map(([label, href]) => <a key={label} href={href}>{label}</a>)}</nav><div className="nav-actions"><button className="language" aria-label="Select language">EN <ChevronDown size={13} /></button><a className="button button-yellow nav-cta" href="https://www.igiraprovisoire.rw">Get Started <ArrowRight size={16} /></a><button className="menu-button" onClick={() => setOpen(!open)} aria-expanded={open} aria-label={open ? 'Close menu' : 'Open menu'}>{open ? <X /> : <Menu />}</button></div></div>{open && <div className="mobile-menu">{navItems.map(([label, href]) => <a key={label} href={href} onClick={() => setOpen(false)}>{label}</a>)}<button className="language">EN <ChevronDown size={13} /></button><a className="button button-yellow" href="https://www.igiraprovisoire.rw">Get Started <ArrowRight size={16} /></a></div>}</header>
 }
 
-function StatsSection() { const stats = [['3', 'Languages'], ['20 min', 'Mock Test'], ['12/20', 'Passing Score'], ['24/7', 'Online Access']]; return <section className="stats-section"><div className="container stats-grid">{stats.map(([value, label]) => <div className="stat" key={label}><strong>{value}</strong><span>{label}</span></div>)}</div></section> }
+function StatsSection() { const stats = [['3', 'Languages'], ['20 min', 'Mock Test'], ['12/20', 'Passing Score'], ['24/7', 'Online Access']] as const; return <section className="stats-section"><div className="container stats-grid">{stats.map(([value, label]) => <AnimatedCounter value={value} label={label} key={label} />)}</div></section> }
 
 function HeroSection() { return <section className="hero" id="top"><div className="road-lines" aria-hidden="true" /><div className="container hero-grid"><Reveal className="hero-copy"><Pill>BUILT FOR RWANDA</Pill><h1>Prepare for the road with <SouthingAccent><HighlightUnderline>confidence.</HighlightUnderline></SouthingAccent></h1><p>Prepare for Rwanda&apos;s driving theory test with practice questions, mock tests and practical driving knowledge in English, French and Kinyarwanda.</p><div className="hero-actions"><a className="button button-yellow" href="https://www.igiraprovisoire.rw">Get Started <ArrowRight size={17} /></a><a className="text-link" href="#blog">Explore the Blog <ArrowRight size={16} /></a></div><div className="hero-trust"><span className="trust-dot" /> A clearer way to prepare</div></Reveal><Reveal className="hero-visual"><div className="hero-desktop"><DeviceMockup frame="heroDesktopFrame" screenshot="heroDesktopScreenshot" /></div><div className="hero-mobile"><DeviceMockup frame="heroMobileFrame" screenshot="heroMobileScreenshot" /></div><div className="float-badge badge-one"><b>12/20</b><span>Passing Score</span></div><div className="float-badge badge-two"><b>20 min</b><span>Mock Test</span></div><div className="float-badge badge-three"><b>3</b><span>Languages</span></div></Reveal></div></section> }
 
@@ -68,7 +86,7 @@ function AdvertiseSection() { return <section className="advertise-section" id="
 
 function WhyIgira() { const points = [['01', 'Built for Rwanda', 'Local context, practical knowledge and a platform made for the roads we share.'], ['02', 'Multilingual', 'Learn in English, Français or Kinyarwanda — without losing meaning in translation.'], ['03', "Learn, don't memorize", 'Understand why the rules matter, so the knowledge stays with you.'], ['04', 'Always accessible', 'A focused preparation experience available whenever you are ready to learn.']]; return <section className="section why-section"><div className="container"><Reveal className="section-heading"><Pill>WHY IGIRA</Pill><h2>Confidence is built <SouthingAccent>before</SouthingAccent> the road.</h2></Reveal><div className="why-grid">{points.map(([num, title, copy]) => <Reveal className="why-item" key={num}><span>{num}</span><h3>{title}</h3><p>{copy}</p></Reveal>)}</div></div></section> }
 
-function FAQSection() { const [open, setOpen] = useState<number | null>(0); return <section className="section faq-section"><div className="container faq-layout"><Reveal className="faq-intro"><Pill>QUESTIONS, ANSWERED</Pill><h2>Good to know before you <SouthingAccent>go.</SouthingAccent></h2><p>Still curious? Start your preparation and discover the experience for yourself.</p><a className="button button-navy" href="https://www.igiraprovisoire.rw">Get Started <ArrowRight size={17} /></a></Reveal><div className="faq-list">{faqs.map(([question, answer], index) => <div className={`faq-item ${open === index ? 'open' : ''}`} key={question}><button onClick={() => setOpen(open === index ? null : index)} aria-expanded={open === index}><span>{question}</span><ChevronDown size={18} /></button>{open === index && <p>{answer}</p>}</div>)}</div></div></section> }
+function FAQSection() { const [open, setOpen] = useState<number | null>(0); return <section className="section faq-section"><div className="container faq-layout"><Reveal className="faq-intro"><Pill>QUESTIONS, ANSWERED</Pill><h2>Good to know before you <SouthingAccent>go.</SouthingAccent></h2><p>Still curious? Start your preparation and discover the experience for yourself.</p><a className="button button-navy" href="https://www.igiraprovisoire.rw">Get Started <ArrowRight size={17} /></a></Reveal><div className="faq-list">{faqs.map(([question, answer], index) => <div className={`faq-item ${open === index ? 'open' : ''}`} key={question}><button onClick={() => setOpen(open === index ? null : index)} aria-expanded={open === index}><span>{question}</span><ChevronDown size={18} /></button><AnimatePresence initial={false}>{open === index && <motion.p initial={{ opacity: 0, height: 0 }} animate={{ opacity: 1, height: 'auto' }} exit={{ opacity: 0, height: 0 }} transition={{ duration: 0.24 }}><span>{answer}</span></motion.p>}</AnimatePresence></div>)}</div></div></section> }
 
 function FinalCTA() { return <section className="final-cta"><div className="container"><Pill>YOUR NEXT MOVE</Pill><h2>Ready to prepare for the <SouthingAccent>road?</SouthingAccent></h2><p>Learn the rules. Practice your knowledge. Prepare with confidence.</p><a className="button button-yellow" href="https://www.igiraprovisoire.rw">Get Started <ArrowRight size={17} /></a></div></section> }
 
