@@ -46,6 +46,18 @@ function AnimatedCounter({ value, label }: { value: string; label: string }) {
 }
 
 const navItems = [['About', '#about'], ['How It Works', '#how-it-works'], ['Blog', '/blog'], ['For Driving Schools', '#schools'], ['Advertise With Us', '#advertise']]
+const languages = [['EN', '🇬🇧', 'English'], ['FR', '🇫🇷', 'Français'], ['RW', '🇷🇼', 'Kinyarwanda']] as const
+
+function LanguageSelector({ mobile = false }: { mobile?: boolean }) {
+  const [open, setOpen] = useState(false)
+  const [selected, setSelected] = useState(languages[0])
+  return <div className={`language-select ${mobile ? 'language-select-mobile' : ''}`}>
+    <button className="language" onClick={() => setOpen((value) => !value)} aria-haspopup="listbox" aria-expanded={open}>
+      <span aria-hidden="true">{selected[1]}</span> {selected[0]} <ChevronDown size={13} />
+    </button>
+    {open && <div className="language-menu" role="listbox" aria-label="Choose language">{languages.map((language) => <button key={language[0]} role="option" aria-selected={selected[0] === language[0]} onClick={() => { setSelected(language); setOpen(false) }}><span aria-hidden="true">{language[1]}</span><span>{language[2]}</span><b>{language[0]}</b></button>)}</div>}
+  </div>
+}
 const faqs = [
   ['What is Igira Provisoire?', 'A digital learning platform that helps people prepare for Rwanda’s driving theory test with clear, practical lessons and timed practice.'],
   ['Is Igira Provisoire free?', 'You can get started and explore the preparation experience directly from the platform.'],
@@ -62,7 +74,7 @@ const faqs = [
 export function LandingNavbar() {
   const [scrolled, setScrolled] = useState(false); const [open, setOpen] = useState(false)
   useEffect(() => { const onScroll = () => setScrolled(window.scrollY > 40); window.addEventListener('scroll', onScroll); return () => window.removeEventListener('scroll', onScroll) }, [])
-  return <header className={`site-nav ${scrolled ? 'scrolled' : ''}`}><div className="nav-pill"><Logo /><nav className="desktop-nav">{navItems.map(([label, href]) => <a key={label} href={href}>{label}</a>)}</nav><div className="nav-actions"><button className="language" aria-label="Select language">EN <ChevronDown size={13} /></button><a className="button button-yellow nav-cta" href="https://www.igiraprovisoire.rw">Get Started <ArrowRight size={16} /></a><button className="menu-button" onClick={() => setOpen(!open)} aria-expanded={open} aria-label={open ? 'Close menu' : 'Open menu'}>{open ? <X /> : <Menu />}</button></div></div>{open && <div className="mobile-menu">{navItems.map(([label, href]) => <a key={label} href={href} onClick={() => setOpen(false)}>{label}</a>)}<button className="language">EN <ChevronDown size={13} /></button><a className="button button-yellow" href="https://www.igiraprovisoire.rw">Get Started <ArrowRight size={16} /></a></div>}</header>
+  return <header className={`site-nav ${scrolled ? 'scrolled' : ''}`}><div className="nav-pill"><Logo /><nav className="desktop-nav">{navItems.map(([label, href]) => <a key={label} href={href}>{label}</a>)}</nav><div className="nav-actions"><LanguageSelector /><a className="button button-yellow nav-cta" href="https://www.igiraprovisoire.rw">Get Started <ArrowRight size={16} /></a><button className="menu-button" onClick={() => setOpen(!open)} aria-expanded={open} aria-label={open ? 'Close menu' : 'Open menu'}>{open ? <X /> : <Menu />}</button></div></div>{open && <div className="mobile-menu">{navItems.map(([label, href]) => <a key={label} href={href} onClick={() => setOpen(false)}>{label}</a>)}<LanguageSelector mobile /><a className="button button-yellow" href="https://www.igiraprovisoire.rw">Get Started <ArrowRight size={16} /></a></div>}</header>
 }
 
 function StatsSection() { const stats = [['3', 'Languages'], ['20 min', 'Mock Test'], ['12/20', 'Passing Score'], ['24/7', 'Online Access']] as const; return <section className="stats-section"><div className="container stats-grid">{stats.map(([value, label]) => <AnimatedCounter value={value} label={label} key={label} />)}</div></section> }
@@ -90,6 +102,6 @@ function FAQSection() { const [open, setOpen] = useState<number | null>(0); retu
 
 function FinalCTA() { return <section className="final-cta"><div className="container"><Pill>YOUR NEXT MOVE</Pill><h2>Ready to prepare for the <SouthingAccent>road?</SouthingAccent></h2><p>Learn the rules. Practice your knowledge. Prepare with confidence.</p><a className="button button-yellow" href="https://www.igiraprovisoire.rw">Get Started <ArrowRight size={17} /></a></div></section> }
 
-function Footer() { return <footer className="footer"><div className="container footer-top"><div className="footer-brand"><Logo /><p>Modern driving theory preparation, built for Rwanda.</p></div><div><h4>Explore</h4><a href="#about">About</a><a href="#how-it-works">How It Works</a><a href="#blog">Blog</a><a href="https://www.igiraprovisoire.rw">Get Started</a></div><div><h4>Learn</h4><a href="#blog">Traffic Rules</a><a href="#blog">Road Signs</a><a href="#blog">Driving Guide</a></div><div><h4>For Business</h4><a href="#schools">Driving Schools</a><a href="#advertise">Advertise With Us</a></div><div><h4>Languages</h4><a href="#">English</a><a href="#">Français</a><a href="#">Kinyarwanda</a></div></div><div className="container footer-bottom"><span>© 2026 Igira Provisoire</span><div><a href="#">Privacy Policy</a><a href="#">Terms of Use</a></div><span>Made for the road ahead.</span></div></footer> }
+function Footer() { return <footer className="footer"><div className="container footer-top"><div className="footer-brand"><Logo /><p>Modern driving theory preparation, built for Rwanda.</p></div><div><h4>Explore</h4><a href="#about">About</a><a href="#how-it-works">How It Works</a><a href="#blog">Blog</a><a href="https://www.igiraprovisoire.rw">Get Started</a></div><div><h4>Learn</h4><a href="/blog?category=Traffic%20Rules">Traffic Rules</a><a href="/blog?category=Road%20Signs">Road Signs</a><a href="/blog?category=Driving%20Guide">Driving Guide</a></div><div><h4>For Business</h4><a href="#schools">Driving Schools</a><a href="#advertise">Advertise With Us</a></div></div><div className="container footer-bottom"><span>© 2026 Igira Provisoire</span><div><a href="#">Privacy Policy</a><a href="#">Terms of Use</a></div><span>Made for the road ahead.</span></div></footer> }
 
 export default function LandingPage() { return <main><LandingNavbar /><HeroSection /><StatsSection /><HowItWorks /><ProductShowcase /><LanguageSection /><BlogPreview /><MobileAppsSection /><DrivingSchoolSection /><AdvertiseSection /><WhyIgira /><FAQSection /><FinalCTA /><Footer /></main> }
