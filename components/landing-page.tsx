@@ -36,13 +36,16 @@ function Reveal({ children, className = '' }: { children: React.ReactNode; class
 function AnimatedCounter({ value, label }: { value: string; label: string }) {
   const ref = React.useRef<HTMLDivElement>(null)
   const visible = useInView(ref, { once: true, margin: '-80px' })
-  const numeric = Number.parseInt(value.replace(/\D/g, ''), 10)
+  const isPassingScore = value.includes('/')
+  const isOnlineAccess = value.includes('/') && value.includes('24')
+  const numeric = isPassingScore ? Number.parseInt(value.split('/')[0], 10) : Number.parseInt(value.replace(/\D/g, ''), 10)
+  const shouldAnimate = !isOnlineAccess
   const progress = useMotionValue(0)
   const spring = useSpring(progress, { stiffness: 90, damping: 20 })
   const [display, setDisplay] = useState('0')
-  useEffect(() => { if (visible && numeric) progress.set(numeric) }, [visible, numeric, progress])
-  useEffect(() => spring.on('change', (latest) => setDisplay(value.includes('/') ? `${Math.round(latest)}/20` : value.includes('min') ? `${Math.round(latest)} min` : value === '3' ? `${Math.round(latest)}` : value)), [spring, value])
-  return <div ref={ref} className="stat"><strong>{numeric ? display : value}</strong><span>{label}</span></div>
+  useEffect(() => { if (visible && numeric && shouldAnimate) progress.set(numeric) }, [visible, numeric, progress, shouldAnimate])
+  useEffect(() => spring.on('change', (latest) => setDisplay(isPassingScore ? `${Math.min(Math.round(latest), numeric)}/20` : value.includes('min') ? `${Math.min(Math.round(latest), numeric)} min` : `${Math.min(Math.round(latest), numeric)}`)), [isPassingScore, numeric, spring, value])
+  return <div ref={ref} className="stat"><strong>{shouldAnimate && numeric ? display : value}</strong><span>{label}</span></div>
 }
 
 const navItems = [['About', '#about'], ['How It Works', '#how-it-works'], ['Blog', '/blog'], ['For Driving Schools', '#schools'], ['Advertise With Us', '#advertise']]

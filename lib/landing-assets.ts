@@ -27,15 +27,15 @@ export const landingPageAssets = {
 } satisfies Record<string, LandingAsset>
 
 export const deviceFrames = {
-  heroDesktopFrame: { src: '', alt: 'Desktop device frame' },
-  heroMobileFrame: { src: '/device-frames/iphone-15.png', alt: 'Apple iPhone 15 transparent device frame' },
-  practiceDesktopFrame: { src: '', alt: 'Desktop device frame' },
-  practiceMobileFrame: { src: '/device-frames/iphone-15.png', alt: 'Apple iPhone 15 transparent device frame' },
-  mockTestDesktopFrame: { src: '', alt: 'Desktop device frame' },
-  mockTestMobileFrame: { src: '', alt: 'Mobile device frame' },
-  androidDeviceFrame: { src: '/device-frames/iphone-15.png', alt: 'Mobile device frame placeholder for Android app' },
-  iosDeviceFrame: { src: '/device-frames/iphone-15.png', alt: 'Apple iPhone 15 transparent device frame' },
-  schoolDesktopFrame: { src: '', alt: 'Desktop device frame' },
+  heroDesktopFrame: { src: '/device-frames/laptop-frame.png', alt: 'Laptop or MacBook device frame' },
+  heroMobileFrame: { src: '/device-frames/iphone-frame.png', alt: 'iPhone device frame' },
+  practiceDesktopFrame: { src: '/device-frames/laptop-frame.png', alt: 'Laptop or MacBook device frame' },
+  practiceMobileFrame: { src: '/device-frames/iphone-frame.png', alt: 'iPhone device frame' },
+  mockTestDesktopFrame: { src: '/device-frames/desktop-monitor-frame.png', alt: 'Desktop monitor device frame' },
+  mockTestMobileFrame: { src: '/device-frames/tablet-frame.png', alt: 'Tablet device frame' },
+  androidDeviceFrame: { src: '/device-frames/android-frame.png', alt: 'Android phone device frame' },
+  iosDeviceFrame: { src: '/device-frames/iphone-frame.png', alt: 'iPhone device frame' },
+  schoolDesktopFrame: { src: '/device-frames/desktop-monitor-frame.png', alt: 'Desktop monitor device frame' },
 } satisfies Record<string, LandingAsset>
 
 export type AssetKey = keyof typeof landingPageAssets
