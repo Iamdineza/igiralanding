@@ -18,9 +18,11 @@ function ImagePlaceholder({ asset, className = '' }: { asset: AssetKey; classNam
 function DeviceMockup({ frame, screenshot, className = '' }: { frame: FrameKey; screenshot: AssetKey; className?: string }) {
   const shot = landingPageAssets[screenshot]
   const device = deviceFrames[frame]
-  return <div className={`device-mockup ${className}`}>
-    <div className="device-screen">{shot.src ? <img src={shot.src} alt={shot.alt} loading="lazy" /> : <div className="screen-placeholder"><span>SCREENSHOT</span><b>{assetLabel(screenshot)}</b></div>}</div>
-    {device.src ? <img className="device-frame" src={device.src} alt={device.alt} /> : <div className="device-frame-placeholder" aria-label={`${assetLabel(frame)} device frame placeholder`}><span>DEVICE FRAME PLACEHOLDER</span><b>{assetLabel(frame)}</b></div>}
+  return <div className={`device-mockup ${className}`} data-frame={frame} data-screenshot={screenshot}>
+    <div className="device-screen" aria-label={`${assetLabel(screenshot)} displayed inside ${assetLabel(frame)}`}>
+      {shot.src ? <img src={shot.src} alt={shot.alt} loading="lazy" /> : <div className="screen-placeholder"><span>SCREENSHOT</span><b>{assetLabel(screenshot)}</b><small>Replace this asset in lib/landing-assets.ts</small></div>}
+    </div>
+    {device.src ? <img className="device-frame" src={device.src} alt={device.alt} loading="lazy" /> : <div className="device-frame-placeholder" aria-label={`${assetLabel(frame)} device frame placeholder`}><span>DEVICE FRAME PLACEHOLDER</span><b>{assetLabel(frame)}</b></div>}
   </div>
 }
 
