@@ -28,13 +28,13 @@ export const landingPageAssets = {
 
 export const deviceFrames = {
   heroDesktopFrame: { src: '', alt: 'Desktop device frame' },
-  heroMobileFrame: { src: '', alt: 'Mobile device frame' },
+  heroMobileFrame: { src: '/device-frames/iphone-15.png', alt: 'Apple iPhone 15 transparent device frame' },
   practiceDesktopFrame: { src: '', alt: 'Desktop device frame' },
-  practiceMobileFrame: { src: '', alt: 'Mobile device frame' },
+  practiceMobileFrame: { src: '/device-frames/iphone-15.png', alt: 'Apple iPhone 15 transparent device frame' },
   mockTestDesktopFrame: { src: '', alt: 'Desktop device frame' },
   mockTestMobileFrame: { src: '', alt: 'Mobile device frame' },
-  androidDeviceFrame: { src: '', alt: 'Android device frame' },
-  iosDeviceFrame: { src: '', alt: 'iPhone device frame' },
+  androidDeviceFrame: { src: '/device-frames/iphone-15.png', alt: 'Mobile device frame placeholder for Android app' },
+  iosDeviceFrame: { src: '/device-frames/iphone-15.png', alt: 'Apple iPhone 15 transparent device frame' },
   schoolDesktopFrame: { src: '', alt: 'Desktop device frame' },
 } satisfies Record<string, LandingAsset>
 
