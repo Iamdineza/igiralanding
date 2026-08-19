@@ -7,7 +7,11 @@ import { ArrowRight, ChevronDown, Menu, Search, X } from 'lucide-react'
 import { assetLabel, deviceFrames, landingPageAssets, type AssetKey, type FrameKey } from '@/lib/landing-assets'
 
 function Logo() {
-  return <a href="#top" className="logo-wrap" aria-label="Igira Provisoire home"><img src={landingPageAssets.logo.src} alt={landingPageAssets.logo.alt} /></a>
+  return <a href="#top" className="logo-wrap logo-navbar" aria-label="Igira Provisoire home"><img src="/igira-logo.png" alt="Igira Provisoire logo" /></a>
+}
+
+function FooterLogo() {
+  return <a href="#top" className="logo-wrap logo-footer" aria-label="Igira Provisoire home"><img src="https://www.igiraprovisoire.rw/assets/logo_developer-B-ocLJTd.png" alt="Igira Provisoire logo" /></a>
 }
 
 function ImagePlaceholder({ asset, className = '' }: { asset: AssetKey; className?: string }) {
@@ -122,6 +126,6 @@ function FAQSection() { const [open, setOpen] = useState<number | null>(0); retu
 
 function FinalCTA() { return <section className="final-cta"><div className="container"><div className="final-cta-card"><Pill>YOUR NEXT MOVE</Pill><h2>Ready to prepare for the <SouthingAccent>road?</SouthingAccent></h2><p>Learn the rules. Practice your knowledge. Prepare with confidence.</p><a className="button button-navy" href="https://www.igiraprovisoire.rw">Get Started <ArrowRight size={17} /></a></div></div></section> }
 
-function Footer() { return <footer className="footer"><div className="container footer-top"><div className="footer-brand"><Logo /><p>Modern driving theory preparation, built for Rwanda.</p></div><div><h4>Explore</h4><a href="#about">About</a><a href="#how-it-works">How It Works</a><a href="#blog">Blog</a><a href="https://www.igiraprovisoire.rw">Get Started</a></div><div><h4>Learn</h4><a href="/blog?category=Traffic%20Rules">Traffic Rules</a><a href="/blog?category=Road%20Signs">Road Signs</a><a href="/blog?category=Driving%20Guide">Driving Guide</a></div><div><h4>For Business</h4><a href="#schools">Driving Schools</a><a href="#advertise">Advertise With Us</a></div></div><div className="container footer-bottom"><span>© 2026 Igira Provisoire</span><div><a href="#">Privacy Policy</a><a href="#">Terms of Use</a></div><span>Made for the road ahead.</span></div></footer> }
+function Footer() { return <footer className="footer"><div className="container footer-top"><div className="footer-brand"><FooterLogo /><p>Modern driving theory preparation, built for Rwanda.</p></div><div><h4>Explore</h4><a href="#about">About</a><a href="#how-it-works">How It Works</a><a href="#blog">Blog</a><a href="https://www.igiraprovisoire.rw">Get Started</a></div><div><h4>Learn</h4><a href="/blog?category=Traffic%20Rules">Traffic Rules</a><a href="/blog?category=Road%20Signs">Road Signs</a><a href="/blog?category=Driving%20Guide">Driving Guide</a></div><div><h4>For Business</h4><a href="#schools">Driving Schools</a><a href="#advertise">Advertise With Us</a></div></div><div className="container footer-bottom"><span>© 2026 Igira Provisoire</span><div><a href="#">Privacy Policy</a><a href="#">Terms of Use</a></div><span>Made for the road ahead.</span></div></footer> }
 
 export default function LandingPage() { return <main><LandingNavbar /><ScrollToTop /><HeroSection /><StatsSection /><HowItWorks /><ProductShowcase /><LanguageSection /><BlogPreview /><MobileAppsSection /><DrivingSchoolSection /><AdvertiseSection /><WhyIgira /><FAQSection /><FinalCTA /><Footer /></main> }
