@@ -11,7 +11,7 @@ function Logo() {
 }
 
 function FooterLogo() {
-  return <a href="#top" className="logo-wrap logo-footer" aria-label="Igira Provisoire home"><img src="https://www.igiraprovisoire.rw/assets/logo_developer-B-ocLJTd.png" alt="Igira Provisoire logo" /></a>
+  return <a href="#top" className="logo-wrap logo-footer" aria-label="Igira Provisoire home"><img src="/igira-footer-logo.png" alt="Igira Provisoire logo" /></a>
 }
 
 function ImagePlaceholder({ asset, className = '' }: { asset: AssetKey; className?: string }) {
