@@ -1,7 +1,7 @@
 export type LandingAsset = { src: string; alt: string }
 
 export const landingPageAssets = {
-  logo: { src: 'https://www.igiraprovisoire.rw/assets/logo_developer-B-ocLJTd.png', alt: 'Igira Provisoire logo' },
+  logo: { src: '/igira-logo.png', alt: 'Igira Provisoire logo' },
   aboutIgiraVisual: { src: '', alt: 'Igira Provisoire platform' },
   rwandaDrivingVisual: { src: '', alt: 'Driving in Rwanda' },
   heroDesktopScreenshot: { src: '', alt: 'Igira Provisoire desktop application' },
