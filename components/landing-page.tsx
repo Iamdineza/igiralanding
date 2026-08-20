@@ -66,6 +66,38 @@ function ScrollToTop() {
 }
 const languages = [['EN', '🇬🇧', 'English'], ['FR', '🇫🇷', 'Français'], ['RW', '🇷🇼', 'Kinyarwanda']] as const
 
+type GoogleTranslateSelect = HTMLSelectElement & { value: string }
+declare global { interface Window { googleTranslateElementInit?: () => void; google?: { translate?: { TranslateElement?: new (options: { pageLanguage: string; includedLanguages: string; autoDisplay: boolean }, elementId: string) => unknown } } } }
+
+function GoogleTranslateBridge() {
+  useEffect(() => {
+    const translateLanguage = (code: string) => {
+      const select = document.querySelector('.goog-te-combo') as GoogleTranslateSelect | null
+      if (!select || code === 'EN') return
+      select.value = code
+      select.dispatchEvent(new Event('change', { bubbles: true }))
+    }
+    window.googleTranslateElementInit = () => {
+      if (window.google?.translate?.TranslateElement) new window.google.translate.TranslateElement({ pageLanguage: 'en', includedLanguages: 'en,fr,rw', autoDisplay: false }, 'google_translate_element')
+    }
+    if (!document.querySelector('script[data-google-translate]')) {
+      const script = document.createElement('script')
+      script.src = 'https://translate.google.com/translate_a/element.js?cb=googleTranslateElementInit'
+      script.async = true
+      script.dataset.googleTranslate = 'true'
+      document.body.appendChild(script)
+    }
+    const onLanguage = (event: Event) => {
+      const code = (event as CustomEvent<string>).detail.toLowerCase()
+      if (code === 'en') { document.cookie = 'googtrans=/en/en; path=/'; window.location.reload(); return }
+      window.setTimeout(() => translateLanguage(code), 300)
+    }
+    window.addEventListener('igira-language-change', onLanguage)
+    return () => window.removeEventListener('igira-language-change', onLanguage)
+  }, [])
+  return <div id="google_translate_element" className="google-translate-hidden" aria-hidden="true" />
+}
+
 function LanguageSelector({ mobile = false }: { mobile?: boolean }) {
   const [open, setOpen] = useState(false)
   const [selected, setSelected] = useState(languages[0])
@@ -131,4 +163,4 @@ function FinalCTA() { return <section className="final-cta"><div className="cont
 
 function Footer() { return <footer className="footer"><div className="container footer-top"><div className="footer-brand"><FooterLogo /><p>Modern driving theory preparation, built for Rwanda.</p></div><div><h4>Explore</h4><a href="#about">About</a><a href="#how-it-works">How It Works</a><a href="#blog">Blog</a><a href="https://www.igiraprovisoire.rw">Get Started</a></div><div><h4>Learn</h4><a href="/blog?category=Traffic%20Rules">Traffic Rules</a><a href="/blog?category=Road%20Signs">Road Signs</a><a href="/blog?category=Driving%20Guide">Driving Guide</a></div><div><h4>For Business</h4><a href="#schools">Driving Schools</a><a href="#advertise">Advertise With Us</a></div></div><div className="container footer-bottom"><span>© 2026 Igira Provisoire</span><div><a href="#">Privacy Policy</a><a href="#">Terms of Use</a></div><span>Made for the road ahead.</span></div></footer> }
 
-export default function LandingPage() { return <main><LandingNavbar /><ScrollToTop /><HeroSection /><StatsSection /><HowItWorks /><ProductShowcase /><LanguageSection /><BlogPreview /><MobileAppsSection /><DrivingSchoolSection /><AdvertiseSection /><WhyIgira /><FAQSection /><FinalCTA /><Footer /></main> }
+export default function LandingPage() { return <main><GoogleTranslateBridge /><LandingNavbar /><ScrollToTop /><HeroSection /><StatsSection /><HowItWorks /><ProductShowcase /><LanguageSection /><BlogPreview /><MobileAppsSection /><DrivingSchoolSection /><AdvertiseSection /><WhyIgira /><FAQSection /><FinalCTA /><Footer /></main> }
