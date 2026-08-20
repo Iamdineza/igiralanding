@@ -19,10 +19,10 @@ export const landingPageAssets = {
   schoolStudentManagementScreenshot: { src: '', alt: 'Driving school student management' },
   schoolCustomizationScreenshot: { src: '', alt: 'Customized driving school software' },
   schoolInstructorManagementScreenshot: { src: '', alt: 'Driving school instructor management' },
-  blogFeatured: { src: '', alt: 'Igira Provisoire featured article' },
-  blogTrafficRules: { src: '', alt: 'Traffic rules educational article' },
-  blogRoadSigns: { src: '', alt: 'Road signs educational article' },
-  blogDrivingGuide: { src: '', alt: 'Driving guide educational article' },
+  blogFeatured: { src: '/blog-road-signs.png', alt: 'Road sign beside a Rwanda hillside road' },
+  blogTrafficRules: { src: '/blog-rwanda-roads.png', alt: 'Winding road through Rwanda hills' },
+  blogRoadSigns: { src: '/blog-road-signs.png', alt: 'Warning road sign beside a Rwanda road' },
+  blogDrivingGuide: { src: '/blog-practice-tips.png', alt: 'Driving theory study notes on a desk' },
   advertisingVisual: { src: '', alt: 'Advertise with Igira Provisoire' },
 } satisfies Record<string, LandingAsset>
 
