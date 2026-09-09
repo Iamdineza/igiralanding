@@ -2,13 +2,14 @@
 
 import * as React from 'react'
 import { useEffect, useState } from 'react'
+import { usePathname } from 'next/navigation'
 import { AnimatePresence, motion, useInView, useMotionValue, useSpring } from 'framer-motion'
 import { ArrowRight, ChevronDown, Menu, Search, X } from 'lucide-react'
 import { Icon } from '@iconify/react'
 import { assetLabel, deviceFrames, landingPageAssets, type AssetKey, type FrameKey } from '@/lib/landing-assets'
 
 function Logo() {
-  return <a href="#top" className="logo-wrap logo-navbar" aria-label="Igira Provisoire home"><img src="/igira-logo.png" alt="Igira Provisoire logo" /></a>
+  return <a href="/" className="logo-wrap logo-navbar" aria-label="Igira Provisoire home"><img src="/igira-logo.png" alt="Igira Provisoire logo" /></a>
 }
 
 function FooterLogo() {
@@ -126,9 +127,11 @@ const faqs = [
 ]
 
 export function LandingNavbar() {
+  const pathname = usePathname()
   const [scrolled, setScrolled] = useState(false); const [open, setOpen] = useState(false)
+  const resolveHref = (href: string) => href.startsWith('#') && pathname !== '/' ? `/${href}` : href
   useEffect(() => { const onScroll = () => setScrolled(window.scrollY > 40); window.addEventListener('scroll', onScroll); return () => window.removeEventListener('scroll', onScroll) }, [])
-  return <header className={`site-nav ${scrolled ? 'scrolled' : ''}`}><div className="nav-pill"><Logo /><nav className="desktop-nav">{navItems.map(([label, href]) => <a key={label} href={href}>{label}</a>)}</nav><div className="nav-actions"><LanguageSelector /><a className="button button-yellow nav-cta" href="https://www.igiraprovisoire.rw">Get Started <ArrowRight size={16} /></a><button className="menu-button" onClick={() => setOpen(!open)} aria-expanded={open} aria-label={open ? 'Close menu' : 'Open menu'}>{open ? <X /> : <Menu />}</button></div></div>{open && <div className="mobile-menu">{navItems.map(([label, href]) => <a key={label} href={href} onClick={() => setOpen(false)}>{label}</a>)}<LanguageSelector mobile /><a className="button button-yellow" href="https://www.igiraprovisoire.rw">Get Started <ArrowRight size={16} /></a></div>}</header>
+  return <header className={`site-nav ${scrolled ? 'scrolled' : ''}`}><div className="nav-pill"><Logo /><nav className="desktop-nav">{navItems.map(([label, href]) => <a key={label} href={resolveHref(href)}>{label}</a>)}</nav><div className="nav-actions"><LanguageSelector /><a className="button button-yellow nav-cta" href="https://www.igiraprovisoire.rw">Get Started <ArrowRight size={16} /></a><button className="menu-button" onClick={() => setOpen(!open)} aria-expanded={open} aria-label={open ? 'Close menu' : 'Open menu'}>{open ? <X /> : <Menu />}</button></div></div>{open && <div className="mobile-menu">{navItems.map(([label, href]) => <a key={label} href={resolveHref(href)} onClick={() => setOpen(false)}>{label}</a>)}<LanguageSelector mobile /><a className="button button-yellow" href="https://www.igiraprovisoire.rw">Get Started <ArrowRight size={16} /></a></div>}</header>
 }
 
 function StatsSection() { const stats = [['3', 'Languages'], ['20 min', 'Mock Test'], ['12/20', 'Passing Score'], ['24/7', 'Online Access']] as const; return <section className="stats-section"><div className="container stats-grid">{stats.map(([value, label]) => <AnimatedCounter value={value} label={label} key={label} />)}</div></section> }
