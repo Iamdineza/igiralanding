@@ -16,7 +16,7 @@ function ReviewCard({ review }: { review: (typeof reviews)[number] }) {
 }
 
 function ReviewRow({ items, reverse = false }: { items: typeof reviews; reverse?: boolean }) {
-  const loop = [...items, ...items]
+  const loop = [...items, ...items, ...items]
   return <div className={`testimonial-marquee-row ${reverse ? 'reverse' : ''}`}><div className="testimonial-marquee-track">{loop.map((review, index) => <ReviewCard review={review} key={`${review.username}-${index}`} />)}</div></div>
 }
 
