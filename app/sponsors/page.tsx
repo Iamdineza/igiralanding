@@ -1,41 +1,11 @@
 import type { Metadata } from 'next'
-import { ArrowRight, ExternalLink } from 'lucide-react'
+import { ArrowRight, BarChart3, Megaphone, MousePointer2, ShieldCheck } from 'lucide-react'
 import { Footer, LandingNavbar } from '@/components/landing-page'
+import { CommercialTierGrid, InquiryForm, SponsorFAQ, SponsorLogo, TechnologySponsorCard } from '@/components/sponsor-components'
+import { institutionalSponsors, technologySponsors } from '@/lib/sponsor-data'
 
-export const metadata: Metadata = {
-  title: 'Our Sponsors | Igira Provisoire',
-  description: 'Meet the partners supporting accessible driving theory preparation in Rwanda.',
-}
+export const metadata: Metadata = { title: 'Sponsorship & Advertising | Igira Provisoire', description: 'Partner with Igira Provisoire to support accessible driving theory preparation in Rwanda.' }
 
 export default function SponsorsPage() {
-  return (
-    <main className="sponsors-page">
-      <LandingNavbar />
-      <header className="sponsors-hero">
-        <div className="container">
-          <span className="pill">OUR SPONSORS</span>
-          <h1>Partners for the road ahead.</h1>
-          <p>We are grateful to the organizations helping make better driving theory preparation more accessible across Rwanda.</p>
-        </div>
-      </header>
-      <section className="sponsors-content" aria-labelledby="diamond-sponsor-title">
-        <div className="container">
-          <div className="sponsor-feature">
-            <div className="sponsor-feature-copy">
-              <span className="sponsor-tier">DIAMOND SPONSOR</span>
-              <h2 id="diamond-sponsor-title">Sokrab</h2>
-              <p>Sokrab is supporting Igira Provisoire as we build clearer, more practical preparation for Rwanda&apos;s future drivers.</p>
-              <a className="button button-navy" href="https://sokrab.com/home" target="_blank" rel="noreferrer">Visit Sokrab <ExternalLink size={16} /></a>
-            </div>
-            <a className="sponsor-logo-lockup" href="https://sokrab.com/home" target="_blank" rel="noreferrer" aria-label="Visit Sokrab, Diamond Sponsor">
-              <span className="sponsor-tier">DIAMOND SPONSOR</span>
-              <img src="/sokrab-logo-black.png" alt="Sokrab logo" />
-              <span className="sponsor-link">sokrab.com <ArrowRight size={15} /></span>
-            </a>
-          </div>
-        </div>
-      </section>
-      <Footer />
-    </main>
-  )
+  return <main className="sponsors-page"><LandingNavbar /><header className="sponsors-hero"><div className="container"><span className="pill">PARTNERSHIPS</span><h1>Build the road ahead with us.</h1><p>Support accessible driving education, reach future drivers and help create safer roads across Rwanda.</p><a className="button button-navy" href="#inquiry">Start a conversation <ArrowRight size={16} /></a></div></header><section className="sponsor-impact section"><div className="container"><div className="sponsor-section-intro"><span className="pill">OUR IMPACT</span><h2>Partnerships with purpose.</h2><p>Igira Provisoire turns complex theory into clear, practical preparation for learners across Rwanda.</p></div><div className="impact-grid"><div><strong>3</strong><span>learning languages</span></div><div><strong>24/7</strong><span>accessible preparation</span></div><div><strong>1</strong><span>clearer road ahead</span></div></div></div></section><section className="sponsor-section section"><div className="container"><div className="sponsor-section-intro"><span className="pill">WHY PARTNER WITH IGIRA</span><h2>Put your support where it matters.</h2></div><div className="partner-reasons"><article><ShieldCheck size={22} /><h3>Meaningful visibility</h3><p>Reach learners in a context built around confidence, progress and responsible driving.</p></article><article><BarChart3 size={22} /><h3>Growing digital reach</h3><p>Support a focused learning platform designed for modern, mobile-first audiences.</p></article><article><Megaphone size={22} /><h3>Shared road-safety goals</h3><p>Connect your organization with practical education and stronger communities.</p></article></div></div></section><section className="sponsor-section section technology-section"><div className="container"><div className="sponsor-section-intro"><span className="pill">TECHNOLOGY SPONSORS</span><h2>Our Technology Sponsors</h2><p>Meet the organizations supporting the technology and infrastructure that power Igira Provisoire.</p></div><div className="technology-grid">{technologySponsors.map((sponsor) => <TechnologySponsorCard key={sponsor.id} sponsor={sponsor} />)}</div></div></section><section className="sponsor-section section commercial-section"><div className="container"><div className="sponsor-section-intro"><span className="pill">COMMERCIAL SPONSORS</span><h2>Our Commercial Sponsors</h2><p>Recognizing the organizations investing in accessible driving education and the growth of Igira Provisoire.</p></div><CommercialTierGrid /></div></section><section className="sponsor-section section institutional-section"><div className="container"><div className="sponsor-section-intro"><span className="pill">INSTITUTIONAL & STRATEGIC</span><h2>Institutional &amp; Strategic Partners</h2><p>Working with institutions and organizations committed to road safety, education and community development.</p></div>{institutionalSponsors.length ? <div className="institutional-grid">{institutionalSponsors.map((sponsor) => <article key={sponsor.id}><h3>{sponsor.name}</h3><p>{sponsor.description}</p></article>)}</div> : <div className="institutional-invite"><span>OPEN INVITATION</span><h3>Partner with us on road safety education.</h3><p>We welcome conversations with institutions and organizations exploring responsible driving initiatives.</p><a className="text-link" href="#inquiry">Explore an institutional partnership <ArrowRight size={15} /></a></div>}</div></section><section className="advertising-opportunities section"><div className="container"><div className="sponsor-section-intro"><span className="pill">ADVERTISING OPPORTUNITIES</span><h2>Advertise With Igira Provisoire</h2><p>Reach learners preparing for their driving theory examinations through thoughtful, relevant campaigns.</p></div><div className="advertising-grid"><div className="ad-copy"><p>Explore placements and campaigns designed around the moments learners are already focused on learning.</p><a className="button button-yellow" href="#inquiry">Request advertising proposal <ArrowRight size={16} /></a></div><div className="ad-mockups"><div className="ad-mockup"><span>HOMEPAGE</span><div><Megaphone size={18} /><b>Sponsored learning moment</b></div></div><div className="ad-mockup"><span>PRACTICE PLATFORM</span><div><MousePointer2 size={18} /><b>Relevant brand placement</b></div></div></div></div></div></section><section className="sponsor-section section inquiry-section"><div className="container inquiry-layout"><div className="sponsor-section-intro"><span className="pill">BECOME A SPONSOR</span><h2>Let&apos;s build something useful.</h2><p>Tell us what you want to support and our team can shape the right partnership conversation.</p></div><InquiryForm /></div></section><section className="sponsor-section section faq-section"><div className="container faq-layout"><div className="sponsor-section-intro"><span className="pill">FAQ</span><h2>Good to know before we begin.</h2></div><SponsorFAQ /></div></section><section className="sponsor-final-cta"><div className="container"><span className="pill">THE NEXT MOVE</span><h2>Ready to partner for the road ahead?</h2><a className="button button-navy" href="#inquiry">Start a conversation <ArrowRight size={16} /></a></div></section><Footer /></main>
 }
