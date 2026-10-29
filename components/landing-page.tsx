@@ -60,7 +60,7 @@ function AnimatedCounter({ value, label }: { value: string; label: string }) {
   return <div ref={ref} className="stat"><strong>{shouldAnimate && numeric ? display : value}</strong><span>{label}</span></div>
 }
 
-const navItems = [['About', '#about'], ['How It Works', '#how-it-works'], ['Blog', '/blog'], ['Sponsors', '/sponsors'], ['For Driving Schools', '#schools'], ['Advertise With Us', '#advertise']]
+const navItems = [['About', '#about'], ['How It Works', '#how-it-works'], ['Blog', '/blog'], ['Sponsors', '/sponsors'], ['For Driving Schools', '#schools'], ['Advertise With Us', '/sponsors']]
 
 function ScrollToTop() {
   const [visible, setVisible] = useState(false)
@@ -159,7 +159,7 @@ function MobileAppsSection() { return <section className="section apps-section" 
 
 function DrivingSchoolSection() { return <><section className="section school-section" id="schools"><div className="container school-layout"><Reveal><Pill>FOR DRIVING SCHOOLS</Pill><h2>Built for learners. <SouthingAccent>Ready for schools.</SouthingAccent></h2><p>Igira Provisoire is expanding into licensed and customizable software for driving schools — helping teams manage the journey from first lesson to licence.</p><ul className="check-list"><li>Student management</li><li>Instructor management</li><li>Lesson scheduling</li><li>Attendance and reports</li><li>Payments and school branding</li><li>Custom workflows and modules</li></ul><Pill>COMING SOON</Pill></Reveal><DeviceMockup frame="schoolDesktopFrame" screenshot="schoolDashboardScreenshot" className="school-device" /></div></section></> }
 
-function AdvertiseSection() { return <section className="advertise-section" id="advertise"><div className="container advertise-layout"><Reveal><Pill>PARTNER WITH IGIRA</Pill><h2>Reach people preparing for the road.</h2><p>Put your brand in front of a focused, growing audience of learners and future drivers in Rwanda.</p><a className="button button-yellow" href="mailto:hello@igiraprovisoire.rw">Advertise With Us <ArrowRight size={17} /></a></Reveal><ImagePlaceholder asset="advertisingVisual" className="advertising-placeholder" /></div></section> }
+function AdvertiseSection() { return <section className="advertise-section" id="advertise"><div className="container advertise-layout"><Reveal><Pill>PARTNER WITH IGIRA</Pill><h2>Reach people preparing for the road.</h2><p>Put your brand in front of a focused, growing audience of learners and future drivers in Rwanda.</p><a className="button button-yellow" href="/sponsors">Advertise With Us <ArrowRight size={17} /></a></Reveal><ImagePlaceholder asset="advertisingVisual" className="advertising-placeholder" /></div></section> }
 
 function WhyIgira() { const points = [['01', 'Built for Rwanda', 'Local context, practical knowledge and a platform made for the roads we share.'], ['02', 'Multilingual', 'Learn in English, Français or Kinyarwanda — without losing meaning in translation.'], ['03', "Learn, don't memorize", 'Understand why the rules matter, so the knowledge stays with you.'], ['04', 'Always accessible', 'A focused preparation experience available whenever you are ready to learn.']]; return <section className="section why-section"><div className="container"><Reveal className="section-heading"><Pill>WHY IGIRA</Pill><h2>Confidence is built <SouthingAccent>before</SouthingAccent> the road.</h2></Reveal><div className="why-grid">{points.map(([num, title, copy]) => <Reveal className="why-item" key={num}><span>{num}</span><h3>{title}</h3><p>{copy}</p></Reveal>)}</div></div></section> }
 
