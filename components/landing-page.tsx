@@ -60,7 +60,7 @@ function AnimatedCounter({ value, label }: { value: string; label: string }) {
   return <div ref={ref} className="stat"><strong>{shouldAnimate && numeric ? display : value}</strong><span>{label}</span></div>
 }
 
-const navItems = [['About', '#about'], ['How It Works', '#how-it-works'], ['Blog', '/blog'], ['For Driving Schools', '#schools'], ['Advertise With Us', '#advertise']]
+const navItems = [['About', '#about'], ['How It Works', '#how-it-works'], ['Blog', '/blog'], ['Sponsors', '/sponsors'], ['For Driving Schools', '#schools'], ['Advertise With Us', '#advertise']]
 
 function ScrollToTop() {
   const [visible, setVisible] = useState(false)
