@@ -22,7 +22,7 @@ export function TechnologySponsorShowcase({ sponsor }: { sponsor: Sponsor }) {
 }
 
 export function SponsorshipTiers() {
-  return <div className="tier-grid">{sponsorshipTiers.map((tier) => { const sponsor = commercialSponsors.find((item) => item.tier === tier.id); return <article className={`tier-card tier-${tier.id}`} key={tier.id}><div className="tier-card-heading"><span className="tier-label">{tier.label} tier</span>{sponsor && <span className="sponsor-badge">CONFIRMED SPONSOR</span>}</div>{sponsor ? <><SponsorLogo sponsor={sponsor} /><h3>{sponsor.name}</h3><p>{sponsor.description}</p></> : <><h3>{tier.label} partnership</h3><p>{tier.description}</p></>}<a href="#inquiry" className="text-link">Request sponsorship details <ArrowRight size={15} /></a></article> })}</div>
+  return <div className="tier-grid">{sponsorshipTiers.map((tier) => { const sponsor = commercialSponsors.find((item) => item.tier === tier.id); return <article className={`tier-card tier-${tier.id}`} key={tier.id}><div className="tier-card-heading"><span className="tier-label">{tier.label} tier</span></div>{sponsor ? <><SponsorLogo sponsor={sponsor} /><h3>{sponsor.name}</h3><p>{sponsor.description}</p></> : <><h3>{tier.label} partnership</h3><p>{tier.description}</p></>}<a href="#inquiry" className="text-link">Request sponsorship details <ArrowRight size={15} /></a></article> })}</div>
 }
 
 export function InquiryForm() {
