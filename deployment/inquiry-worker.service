@@ -1,0 +1,15 @@
+[Unit]
+Description=Igira partnership inquiry Telegram notifications
+After=network-online.target
+Wants=network-online.target
+
+[Service]
+Type=oneshot
+User=igiraadmin
+ExecStart=/usr/bin/curl --config /etc/igira/inquiry-worker.curl --silent --show-error --fail --output /dev/null
+TimeoutStartSec=110
+NoNewPrivileges=true
+PrivateTmp=true
+ProtectSystem=strict
+ProtectHome=true
+RestrictAddressFamilies=AF_INET AF_INET6 AF_UNIX

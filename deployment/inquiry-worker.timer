@@ -1,0 +1,10 @@
+[Unit]
+Description=Check Igira partnership inquiry notification queue
+
+[Timer]
+OnBootSec=2min
+OnUnitInactiveSec=1min
+Unit=inquiry-worker.service
+
+[Install]
+WantedBy=timers.target

@@ -1,0 +1,25 @@
+name: igira-landing-preview
+services:
+  landing:
+    build:
+      context: .
+      args:
+        NEXT_PUBLIC_APP_URL: ${NEXT_PUBLIC_APP_URL:-https://staging.igiraprovisoire.rw}
+        NEXT_PUBLIC_SITE_URL: ${NEXT_PUBLIC_SITE_URL:-https://about.igiraprovisoire.rw}
+        NEXT_PUBLIC_ENABLE_VERCEL_ANALYTICS: 'false'
+    ports:
+      - 127.0.0.1:18081:3000
+    restart: unless-stopped
+    read_only: true
+    tmpfs:
+      - /tmp:size=32m,mode=1777
+      - /app/.next/cache:size=64m,uid=1001,gid=1001,mode=0700
+    cap_drop: [ALL]
+    security_opt: [no-new-privileges:true]
+    mem_limit: 512m
+    cpus: 1.0
+    logging:
+      driver: json-file
+      options:
+        max-size: 10m
+        max-file: '3'

@@ -1,5 +1,7 @@
 # igiralanding
 
+Self-hosting preparation and the local review are documented in [docs/HOSTING-REVIEW.md](docs/HOSTING-REVIEW.md). No VPS deployment or DNS change has been performed by that batch. Use the pinned pnpm version and `pnpm typecheck` before building.
+
 This is a [Next.js](https://nextjs.org) project bootstrapped with [v0](https://v0.app).
 
 ## Built with v0

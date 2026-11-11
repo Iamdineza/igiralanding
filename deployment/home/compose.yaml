@@ -1,0 +1,32 @@
+services:
+  landing:
+    build:
+      context: ../..
+      dockerfile: Dockerfile
+      args:
+        NEXT_PUBLIC_APP_URL: https://igiraprovisoire.rw
+        NEXT_PUBLIC_SITE_URL: https://home.igiraprovisoire.rw
+        NEXT_PUBLIC_ENABLE_VERCEL_ANALYTICS: 'false'
+    environment:
+      INQUIRIES_ENABLED: 'false'
+    restart: unless-stopped
+    read_only: true
+    cap_drop: [ALL]
+    security_opt: [no-new-privileges:true]
+    tmpfs:
+      - /tmp:size=32m,mode=1777
+      - /app/.next/cache:size=64m,uid=1001,gid=1001,mode=0700
+    mem_limit: 768m
+    cpus: 1.0
+    networks:
+      ingress:
+        aliases: [igira-home-web]
+    logging:
+      driver: json-file
+      options:
+        max-size: 10m
+        max-file: '3'
+networks:
+  ingress:
+    name: igira-home-ingress
+    driver: bridge

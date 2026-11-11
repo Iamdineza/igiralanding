@@ -1,6 +1,8 @@
 'use client'
 
-import { useState } from 'react'
+import { useState, useEffect, useRef } from 'react'
+import { INQUIRY_EMAIL } from '@/lib/inquiry'
+import InquiryCaptcha from '@/components/inquiry-captcha'
 import { ArrowRight, ChevronDown, ExternalLink } from 'lucide-react'
 import type { Sponsor, SponsorTier } from '@/lib/sponsor-data'
 import { commercialSponsors, sponsorshipTiers, technologySponsors } from '@/lib/sponsor-data'
@@ -26,7 +28,53 @@ export function SponsorshipTiers() {
 }
 
 export function InquiryForm() {
-  return <form className="inquiry-form" id="inquiry" data-integration-point="partnership-inquiry"><div className="form-grid"><label>Organization name<input name="organization" required /></label><label>Contact person<input name="contact" required /></label><label>Business email<input name="email" type="email" required /></label><label>Phone number<input name="phone" type="tel" required /></label><label className="form-full">Partnership interest<select name="interest" required defaultValue=""><option value="" disabled>Select an option</option><option>Diamond Sponsorship</option><option>Platinum Sponsorship</option><option>Gold Sponsorship</option><option>Silver Sponsorship</option><option>Bronze Sponsorship</option><option>Technology Sponsorship</option><option>Institutional Partnership</option><option>Advertising</option><option>Other Collaboration</option></select></label><label>Estimated sponsorship budget <span className="optional-label">Optional</span><input name="budget" inputMode="decimal" /></label><label className="form-full">Message<textarea name="message" rows={5} required /></label></div><p className="form-note">We&apos;ll use these details only to respond to your partnership inquiry. Connect this form to your email or CRM endpoint before accepting submissions.</p><button className="button button-yellow" type="submit">Send inquiry <ArrowRight size={16} /></button></form>
+  const [error, setError] = useState('')
+  const [success, setSuccess] = useState('')
+  const [busy, setBusy] = useState(false)
+  const [siteKey, setSiteKey] = useState('')
+  const [ready, setReady] = useState(false)
+  const [captcha, setCaptcha] = useState('')
+  const [revision, setRevision] = useState(0)
+  const requestId = useRef('')
+  const lastPayload = useRef('')
+  useEffect(() => {
+    const controller = new AbortController()
+    fetch('/api/inquiries',{signal:controller.signal}).then(r=>r.json()).then(c=>{setReady(c.enabled === true);setSiteKey(c.siteKey || '')}).catch(()=>setReady(false))
+    return ()=>controller.abort()
+  },[])
+  return <form method="post" onSubmit={async (event) => {
+    event.preventDefault()
+    if(busy || !ready || !captcha) return
+    const form = event.currentTarget
+    const formData = new FormData(form)
+    const payload = Object.fromEntries(['organization', 'contact', 'email', 'phone', 'interest', 'budget', 'message'].map(key => [key, formData.get(key)]))
+    const snapshot = JSON.stringify(payload)
+    if(!requestId.current || lastPayload.current !== snapshot) { requestId.current = crypto.randomUUID(); lastPayload.current = snapshot }
+    setBusy(true); setError(''); setSuccess('')
+    try {
+      const response = await fetch('/api/inquiries',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({...payload,captcha,requestId:requestId.current}),signal:AbortSignal.timeout(25000)})
+      const result = await response.json()
+      if(!response.ok) throw Error(result.message || 'Unable to confirm receipt. Please retry.')
+      setSuccess(result.message); form.reset(); requestId.current=''; lastPayload.current=''
+    } catch(failure) { setError(failure instanceof Error && failure.name !== 'TimeoutError' ? failure.message : 'Unable to confirm receipt. Please retry with the same form.') }
+    finally { setBusy(false); setCaptcha(''); setRevision(v=>v+1) }
+  }} className="inquiry-form" id="inquiry" aria-describedby="inquiry-note">
+    <div className="form-grid">
+      <label>Organization name<input name="organization" maxLength={200} autoComplete="organization" required /></label>
+      <label>Contact person<input name="contact" maxLength={100} autoComplete="name" required /></label>
+      <label>Business email<input name="email" type="email" maxLength={254} autoComplete="email" required /></label>
+      <label>Phone number<input name="phone" type="tel" maxLength={32} autoComplete="tel" required /></label>
+      <label className="form-full">Partnership interest<select name="interest" required defaultValue=""><option value="" disabled>Select an option</option>{['Diamond Sponsorship','Platinum Sponsorship','Gold Sponsorship','Silver Sponsorship','Bronze Sponsorship','Technology Sponsorship','Institutional Partnership','Advertising','Other Collaboration'].map(value => <option key={value}>{value}</option>)}</select></label>
+      <label>Estimated sponsorship budget <span className="optional-label">Optional</span><input name="budget" maxLength={100} inputMode="decimal" /></label>
+      <label className="form-full">Message<textarea name="message" rows={5} maxLength={1500} required /></label>
+    </div>
+    <p className="form-note" id="inquiry-note">Submit your inquiry directly to the Igira team. Your details are stored privately for administrator review. A short Telegram alert notifies the team; your full message is kept in the inbox.</p>
+    {!ready && <p role="status" className="inquiry-status">Online submission is not connected in this preview. Contact <a href={`mailto:${INQUIRY_EMAIL}`}>{INQUIRY_EMAIL}</a> in the meantime.</p>}
+    {ready && <InquiryCaptcha siteKey={siteKey} onToken={setCaptcha} revision={revision} />}
+    {error && <p role="alert">{error}</p>}
+    {success && <p role="status" className="inquiry-success">{success}</p>}
+    <button className="button button-yellow" type="submit" disabled={!ready || !captcha || busy}>{busy ? 'Submitting…' : 'Send inquiry'} <ArrowRight size={16} /></button>
+  </form>
 }
 
 export function SponsorWall() {
@@ -37,6 +85,6 @@ export function SponsorWall() {
 
 export function SponsorFAQ() {
   const [open, setOpen] = useState<number | null>(0)
-  const items = [['What sponsorship opportunities are available?', 'Diamond, Platinum, Gold, Silver and Bronze sponsorship tiers are available, alongside technology and institutional partnerships.'], ['How are sponsorship tiers determined?', 'Tier recognition is shaped by the scope of support, visibility and collaboration agreed together. We do not publish fixed prices yet.'], ['Can organizations contribute technology or services instead of money?', 'Yes. Technology, infrastructure and professional services can be explored as part of a partnership conversation.'], ['Can a sponsor also advertise on Igira?', 'Yes. Advertising is handled as a separate opportunity and does not automatically grant sponsorship status.'], ['Can public institutions become partners?', 'Yes. Institutional partnerships are considered separately and only confirmed relationships are displayed as partners.'], ['How can an organization submit a partnership proposal?', 'Complete the inquiry form on this page with your organization and partnership details.']]
+  const items = [['What sponsorship opportunities are available?', 'Diamond, Platinum, Gold, Silver and Bronze sponsorship tiers are available, alongside technology and institutional partnerships.'], ['How are sponsorship tiers determined?', 'Tier recognition is shaped by the scope of support, visibility and collaboration agreed together. We do not publish fixed prices yet.'], ['Can organizations contribute technology or services instead of money?', 'Yes. Technology, infrastructure and professional services can be explored as part of a partnership conversation.'], ['Can a sponsor also advertise on Igira?', 'Yes. Advertising is handled as a separate opportunity and does not automatically grant sponsorship status.'], ['Can public institutions become partners?', 'Yes. Institutional partnerships are considered separately and only confirmed relationships are displayed as partners.'], ['How can an organization submit a partnership proposal?', 'Submit the inquiry form to our private administrator inbox, or email info@igiraprovisoire.rw directly. Online submission is available once the secure backend is connected.']]
   return <div className="sponsor-faq-list">{items.map(([question, answer], index) => <div className={`sponsor-faq-item ${open === index ? 'open' : ''}`} key={question}><button type="button" onClick={() => setOpen(open === index ? null : index)} aria-expanded={open === index}>{question}<ChevronDown size={18} /></button>{open === index && <p>{answer}</p>}</div>)}</div>
 }

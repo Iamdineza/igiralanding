@@ -13,3 +13,15 @@ __v0_jsx-dev-runtime.ts
 node_modules
 .next/
 .DS_Store
+# Local build/typecheck output and private configuration
+*.tsbuildinfo
+next-env.d.ts
+.env*
+!.env.example
+
+# Private backups and generated Python files
+__pycache__/
+*.pyc
+bkp/
+*.dump
+*.backup.zip

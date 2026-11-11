@@ -1,0 +1,8 @@
+# Copy privately to /etc/igira/inquiry-worker.curl, owned by igiraadmin mode 600.
+# Replace the placeholder locally; never commit a configured copy.
+url = "https://home.igiraprovisoire.rw/api/inquiries/notifications"
+request = "POST"
+header = "Authorization: Bearer REPLACE_WITH_PRIVATE_INQUIRY_WORKER_SECRET"
+connect-timeout = 5
+max-time = 100
+proto = "=https"

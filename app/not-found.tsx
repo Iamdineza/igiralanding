@@ -1,6 +1,7 @@
 import Link from 'next/link'
-import { ArrowLeft, ArrowRight } from 'lucide-react'
+import { ArrowRight, BookOpen, TrafficCone } from 'lucide-react'
+import SiteShell from '@/components/site-shell'
 
 export default function NotFound() {
-  return <main className="not-found-page"><div className="not-found-road" aria-hidden="true"><span className="road-dash dash-one" /><span className="road-dash dash-two" /><span className="road-dash dash-three" /><div className="not-found-car"><span className="car-window" /><span className="car-wheel wheel-left" /><span className="car-wheel wheel-right" /></div></div><div className="not-found-copy"><span className="pill">404 / WRONG TURN</span><p className="not-found-number">4<span>0</span>4</p><h1>This page took a wrong turn.</h1><p>Looks like this road does not exist. Let&apos;s get you back to the route that helps you prepare with confidence.</p><div className="not-found-actions"><Link className="button button-yellow" href="/">Back to home <ArrowRight size={17} /></Link><Link className="text-link" href="/blog"><ArrowLeft size={16} /> Explore the blog</Link></div></div></main>
+  return <SiteShell className="missing-page"><section className="site-container missing-layout"><div className="missing-sign" aria-hidden="true"><TrafficCone size={90} strokeWidth={1} /><span>404</span></div><div><span className="site-eyebrow">This road ends here</span><h1>Let’s get you<br />back on track.</h1><p>The page you’re looking for isn’t available. Head back to Igira or explore a learning guide.</p><div className="site-actions"><Link href="/" className="brand-button brand-button-navy">Back to home <ArrowRight size={18} /></Link><Link href="/blog" className="brand-text-link"><BookOpen size={18} />Explore the knowledge hub</Link></div></div></section></SiteShell>
 }
